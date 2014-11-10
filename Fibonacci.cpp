@@ -103,6 +103,12 @@ long long int fib3(int x){	//linear time, constant memory
 	return fibs[2];
 }
 
+Matrix fib4help(Matrix matrix, int x){
+	if (x == 1) return matrix;
+	if ((x % 2) == 0) return fib4help(matrix.mult(matrix), x / 2);
+	if ((x % 2) == 1) return matrix.mult(fib4help(matrix.mult(matrix), x / 2));
+}
+
 long long int fib4(int x){	//logarithmic running time
 	if (x == 0) return 0;
 	if (x == 1) return 1;
@@ -122,31 +128,13 @@ long long int fib4(int x){	//logarithmic running time
 	tempV.push_back(1);
 	helpV2.push_back(tempV);
 
-	Matrix helpMatrix1(helpV1);
-	Matrix resMatrix(helpV1);
-	Matrix helpMatrix2(helpV2);
-	int oddcount = 0;
+	Matrix resMatrix(helpV1);	//2x2 matrix
+	Matrix helpMatrix2(helpV2);	//2x1 matrix
+
+	resMatrix = fib4help(resMatrix, x);
 
 
-	/*for (x; x >= 1;){
-		if (x == 1){
-			resMatrix = helpMatrix1.mult(resMatrix);
-			x--;
-		}else if ((x % 2) == 0){
-			resMatrix = resMatrix.mult(resMatrix);
-			x = x / 2;
-		}else if ((x % 2) == 1){
-			resMatrix = resMatrix.mult(resMatrix.mult(resMatrix));
-			x = (x - 1) / 2;
-			oddcount++;
-		}
-	}*/
-
-	/*for (oddcount; oddcount > 0; oddcount--){
-		resMatrix = helpMatrix1.mult(resMatrix);
-	}*/
-
-	resMatrix = resMatrix.mult(helpMatrix2);
+	resMatrix = resMatrix.mult(helpMatrix2);	// calculated new 2x2 matrix multiplied with 2x1 matrix
 	return resMatrix.getElement(0, 0);
 }
 
@@ -186,34 +174,7 @@ int _tmain(int argc, _TCHAR* argv[])
 	initFibLUT();
 	testing::InitGoogleTest(&argc, argv);
 
-	//TESTING GROUND
-	/*
-	vector<vector<int>> testV;
-	vector<vector<int>> testV2;
-	vector<int> tempV;
-	tempV.push_back(0);
-	tempV.push_back(1);
-	testV.push_back(tempV);
-	tempV.clear();
-	tempV.push_back(2);
-	tempV.push_back(3);
-	testV.push_back(tempV);
-	tempV.clear();
-
-	tempV.push_back(0);
-	testV2.push_back(tempV);
-	tempV.clear();
-	tempV.push_back(1);
-	testV2.push_back(tempV);
-
-	Matrix testM (testV);
-	Matrix testM2(testV2);
-	//cout << testM2.toString();
-	//cout << testM.mult(testM2).toString();
-	//cout << testM.toString();		//reassuring the Matrix works, too
-
-	*/
-	//TESTING GROUND END
+	RUN_ALL_TESTS();
 
 	for (int i = 1; i > 0;){
 		cout << "Bitte geben sie die Nummer der zu berechnenden Fibonacci-Zahl an: ";
@@ -224,9 +185,6 @@ int _tmain(int argc, _TCHAR* argv[])
 		cout << "Das Ergebnis von fib4 ist " << fib4(input) << ".\n";
 		cout << "Das Ergebnis von fib4 ist " << fib5(input) << ".\n";
 	}
-
-	//RUN_ALL_TESTS();
-	cin >> input;
 	return 0;
 }
 
@@ -258,6 +216,16 @@ TEST(fib3Test, TestCorrectComputation){
 	EXPECT_EQ(55, fib3(10));
 	EXPECT_EQ(6765, fib3(20));
 	EXPECT_EQ(832040, fib3(30));
+}
+
+TEST(fib4Test, TestCorrectComputation){
+	EXPECT_EQ(0, fib4(0));
+	EXPECT_EQ(1, fib4(1));
+	EXPECT_EQ(1, fib4(2));
+	EXPECT_EQ(2, fib4(3));
+	EXPECT_EQ(55, fib4(10));
+	EXPECT_EQ(6765, fib4(20));
+	EXPECT_EQ(832040, fib4(30));
 }
 
 TEST(fib5Test, TestCorrectComputation){
