@@ -10,17 +10,17 @@ using namespace std;
 long long int fibLUT [90];
 
 class Matrix{
-	vector<vector<int>> mat;
+	vector<vector<long long int>> mat;
 public:
-	Matrix(vector<vector<int>>);
+	Matrix(vector<vector<long long int>>);
 	Matrix mult(Matrix);
 	string toString();
 	int getHeight();
 	int getWidth();
-	int getElement(int, int);
+	long long int getElement(int, int);
 };
 
-Matrix::Matrix(vector<vector<int>> x){
+Matrix::Matrix(vector<vector<long long int>> x){
 	mat = x;
 }
 
@@ -32,7 +32,7 @@ int Matrix::getWidth(){
 	return mat[0].size();
 }
 
-int Matrix::getElement(int height, int width){
+long long int Matrix::getElement(int height, int width){
 	return mat[height][width];
 }
 
@@ -48,7 +48,7 @@ string Matrix::toString(){
 }
 
 Matrix Matrix::mult(Matrix x){	//multiplication of given matrix * x, simple implementation just for fibonacci-calculation purposes
-	vector<vector<int> > res;
+	vector<vector<long long int> > res;
 
 	res.resize(getHeight());		//build new pre-matrix to be filled with values next
 	for (int i = 0; i < getHeight(); ++i)
@@ -113,9 +113,9 @@ long long int fib4(int x){	//logarithmic running time
 	if (x == 0) return 0;
 	if (x == 1) return 1;
 
-	vector<vector<int>> helpV1;	//the vector we will use for the 2x2 matrix
-	vector<vector<int>> helpV2;	//the vector we will use for the 2x1 matrix
-	vector<int> tempV;
+	vector<vector<long long int>> helpV1;	//the vector we will use for the 2x2 matrix
+	vector<vector<long long int>> helpV2;	//the vector we will use for the 2x1 matrix
+	vector<long long int> tempV;
 	tempV.push_back(0);
 	helpV2.push_back(tempV);
 	tempV.push_back(1);
@@ -138,12 +138,12 @@ long long int fib4(int x){	//logarithmic running time
 	return resMatrix.getElement(0, 0);
 }
 
-int fib5(int x){	//formula derived from lecture, no matrix needed
+long long int fib5(int x){	//formula derived from lecture, no matrix needed
 	double res = floor((1.0 / pow(5.0, 0.5)) * pow(((1.0 + pow(5.0, 0.5)) / 2.0), x) + 0.5);
 	return res;
 }
 
-int fib6(int x){	//taking information from lookup table, if not, use fib5() to calculate
+long long int fib6(int x){	//taking information from lookup table, if not, use fib5() to calculate
 	if(x< sizeof(fibLUT))return fibLUT[x];
 	return fib5(x);
 }
@@ -183,7 +183,8 @@ int _tmain(int argc, _TCHAR* argv[])
 		cout << "Das Ergebnis von fib2 ist " << fib2(input) << ".\n";
 		cout << "Das Ergebnis von fib3 ist " << fib3(input) << ".\n";
 		cout << "Das Ergebnis von fib4 ist " << fib4(input) << ".\n";
-		cout << "Das Ergebnis von fib4 ist " << fib5(input) << ".\n";
+		cout << "Das Ergebnis von fib5 ist " << fib5(input) << ".\n";
+		cout << "Das Ergebnis von fib6 ist " << fib6(input) << ".\n";
 	}
 	return 0;
 }
@@ -236,4 +237,32 @@ TEST(fib5Test, TestCorrectComputation){
 	EXPECT_EQ(55, fib5(10));
 	EXPECT_EQ(6765, fib5(20));
 	EXPECT_EQ(832040, fib5(30));
+}
+
+TEST(fib6Test, TestCorrectComputation){
+	EXPECT_EQ(0, fib6(0));
+	EXPECT_EQ(1, fib6(1));
+	EXPECT_EQ(1, fib6(2));
+	EXPECT_EQ(2, fib6(3));
+	EXPECT_EQ(55, fib6(10));
+	EXPECT_EQ(6765, fib6(20));
+	EXPECT_EQ(832040, fib6(30));
+}
+
+/* this test has to fail.
+It's a simple overflow error, which could be fixed by either
+	- using gcc which supports __int128,
+	- using a library that supports hihgher values
+	- chatching errors by not allowing numbers above 90
+
+In case 1, the price is using another compiler, and therefore making it only compilable in that compiler.
+In case 2, the price is searching for a library, and have the possibility of higher calculation times overall (if the implementation isn't as good as the standard ones).
+In case 3, the price is coding exceptions without a real + in usability of the program.
+*/
+
+TEST(fibMAKEITFAIL, TestCorrectComputation){
+	EXPECT_EQ(12200160415121873000, fib3(93));
+	EXPECT_EQ(12200160415121873000, fib4(93));
+	EXPECT_EQ(12200160415121873000, fib5(93));
+	EXPECT_EQ(12200160415121873000, fib6(93));
 }
