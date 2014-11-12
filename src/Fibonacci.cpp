@@ -1,73 +1,11 @@
 #include "stdafx.h"	//visual studio created file. it's meant to decrease compiling time, but this program is short, so it's empty
-#include <iostream>
-#include <vector>	//for fib4
-#include <gtest\gtest.h>
-#include <math.h>	//for fib5
-#include <iostream>	//for fibToText
-#include <fstream>
+
 using namespace std;
 
-long long int fibLUT [90];
-
-class Matrix{
-	vector<vector<long long int>> mat;
-public:
-	Matrix(vector<vector<long long int>>);
-	Matrix mult(Matrix);
-	string toString();
-	int getHeight();
-	int getWidth();
-	long long int getElement(int, int);
-};
-
-Matrix::Matrix(vector<vector<long long int>> x){
-	mat = x;
-}
-
-int Matrix::getHeight(){	//methods to make dimensions of matrix more clear
-	return mat.size();
-}
-
-int Matrix::getWidth(){
-	return mat[0].size();
-}
-
-long long int Matrix::getElement(int height, int width){
-	return mat[height][width];
-}
-
-string Matrix::toString(){
-	string x = "";
-	for (int height = 0; height < getHeight(); height++){
-		for (int width = 0; width < getWidth(); width++){
-			x.append(to_string(getElement(height, width)) + " ");
-		}
-		x.append("\n");
-	}
-	return x;
-}
-
-Matrix Matrix::mult(Matrix x){	//multiplication of given matrix * x, simple implementation just for fibonacci-calculation purposes
-	vector<vector<long long int> > res;
-
-	res.resize(getHeight());		//build new pre-matrix to be filled with values next
-	for (int i = 0; i < getHeight(); ++i)
-		res[i].resize(x.getWidth());
-
-	for (int height = 0; height < res.size(); height++){		//run through the new pre-matrix
-		for (int width = 0; width < res[0].size(); width++){
-			res[height][width] = 0;								//initialise every member of res with 0, to add up multiplications until everything has been added up
-			for (int i = 0; i < getWidth(); i++){
-				res[height][width] += getElement(height, i) * x.getElement(i, width);
-			}
-		}
-	}
-	Matrix resM = Matrix(res);
-	return resM;
-}
+std::array <long long int,90> fibLUT;
 
 long long int fib(int x){		//code derived from definition
-	if (x == 0) return 0;
+	if (x <= 0) return 0;
 	if (x == 1) return 1;
 	return fib(x - 1) + fib(x - 2);
 }
@@ -78,7 +16,7 @@ long long int fib2(int x){	//linear running time and memory
 	fibs.push_back(0);
 	fibs.push_back(1);
 
-	if (x == 0) return 0;
+	if (x <= 0) return 0;
 
 	for (int i = 2; i <= x; i++){
 		fibs.push_back(fibs.at(i - 1) + fibs.at(i - 2));
@@ -104,35 +42,28 @@ long long int fib3(int x){	//linear time, constant memory
 }
 
 Matrix fib4help(Matrix matrix, int x){
-	if (x == 1) return matrix;
+	if (x <= 1) return matrix;
 	if ((x % 2) == 0) return fib4help(matrix.mult(matrix), x / 2);
 	if ((x % 2) == 1) return matrix.mult(fib4help(matrix.mult(matrix), x / 2));
 }
 
 long long int fib4(int x){	//logarithmic running time
-	if (x == 0) return 0;
+	if (x <= 0) return 0;
 	if (x == 1) return 1;
 
-	vector<vector<long long int>> helpV1;	//the vector we will use for the 2x2 matrix
-	vector<vector<long long int>> helpV2;	//the vector we will use for the 2x1 matrix
-	vector<long long int> tempV;
-	tempV.push_back(0);
-	helpV2.push_back(tempV);
-	tempV.push_back(1);
-	helpV1.push_back(tempV);
-	tempV.clear();
-	tempV.push_back(1);
-	tempV.push_back(1);
-	helpV1.push_back(tempV);
-	tempV.clear();
-	tempV.push_back(1);
-	helpV2.push_back(tempV);
-
+	vector<vector<long long int> > helpV1 = vector<vector<long long int> >(2, vector<long long int>(2, 0));
+	helpV1[0][0] = 0;
+	helpV1[0][1] = 1;
+	helpV1[1][0] = 1;
+	helpV1[1][1] = 1;
 	Matrix resMatrix(helpV1);	//2x2 matrix
+	
+	vector<vector<long long int> > helpV2 = vector<vector<long long int> >(2, vector<long long int>(1, 0));
+	helpV2[0][0] = 0;
+	helpV2[1][0] = 1;
 	Matrix helpMatrix2(helpV2);	//2x1 matrix
 
 	resMatrix = fib4help(resMatrix, x);
-
 
 	resMatrix = resMatrix.mult(helpMatrix2);	// calculated new 2x2 matrix multiplied with 2x1 matrix
 	return resMatrix.getElement(0, 0);
@@ -144,7 +75,7 @@ long long int fib5(int x){	//formula derived from lecture, no matrix needed
 }
 
 long long int fib6(int x){	//taking information from lookup table, if not, use fib5() to calculate
-	if(x< sizeof(fibLUT))return fibLUT[x];
+	if(x < fibLUT.size()) return fibLUT[x];
 	return fib5(x);
 }
 
@@ -168,7 +99,7 @@ void initFibLUT(){	//open textfile, read the strings, convert them to int, then 
 	}
 }
 
-int _tmain(int argc, _TCHAR* argv[])
+int main(int argc, _TCHAR* argv[])
 {
 	int input;
 	initFibLUT();
