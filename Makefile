@@ -1,13 +1,14 @@
-CXX = cl
-CXXFLAGS = -Wall 
+CXX = g++
+CXXFLAGS = -Wall -o
+LDFLAGS =
 
-.PHONY all:
-all: clean build
+.PHONY: all
+all: build
 
-.PHONY build:
-build: Fibonacci.cpp
-	$(CXX) $(CXXFLAGS) Fibonacci.cpp
+.PHONY: build
+build: Fibonacci.cpp = Fibonacci.obj
+	$(CXX) Fibonacci.cpp = Fibonacci.obj $(LDFLAGS) $(CXXFLAGS) -o Fibonacci
 	
-.PHONY clean:
+.PHONY: clean
 clean:
 	-del Fibonacci.obj Fibonacci.exe
