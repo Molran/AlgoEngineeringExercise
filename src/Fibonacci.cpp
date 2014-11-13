@@ -19,14 +19,15 @@ long long int fib2(int x){	//linear running time and memory
 	if (x <= 0) return 0;
 
 	for (int i = 2; i <= x; i++){
-		fibs.push_back(fibs.at(i - 1) + fibs.at(i - 2));
+		fibs.push_back(fibs[i - 1] + fibs[i - 2]);
 	}
 
 	return fibs.back();
 }
 
 long long int fib3(int x){	//linear time, constant memory
-	if (x <= 1) return x;
+	if (x <= 0) return 0;
+	if (x == 1) return 1;
 
 	long long int fibs[3];
 	fibs[0] = 0;
@@ -69,7 +70,8 @@ long long int fib4(int x){	//logarithmic running time
 	return resMatrix.getElement(0, 0);
 }
 
-long long int fib5(int x){	//formula derived from lecture, no matrix needed
+long long int fib5(int x){	//formula derived from lecture, no matrix needed, unprecise after fib5(75)
+	if (fib5 < 0) return 0;
 	double res = floor((1.0 / pow(5.0, 0.5)) * pow(((1.0 + pow(5.0, 0.5)) / 2.0), x) + 0.5);
 	return res;
 }
@@ -90,7 +92,7 @@ void initFibLUT(){	//open textfile, read the strings, convert them to int, then 
 	ifstream fibText;
 	fibText.open("fibNumbers.txt");	
 	string fibString;
-	int fibNum;
+	long long int fibNum;
 	for (int i = 0; i < 90; i++){
 		getline(fibText, fibString);
 		stringstream conv(fibString);
@@ -102,6 +104,7 @@ void initFibLUT(){	//open textfile, read the strings, convert them to int, then 
 int main(int argc, _TCHAR* argv[])
 {
 	int input;
+	//fibToText();
 	initFibLUT();
 	testing::InitGoogleTest(&argc, argv);
 
@@ -110,8 +113,8 @@ int main(int argc, _TCHAR* argv[])
 	for (int i = 1; i > 0;){
 		cout << "Bitte geben sie die Nummer der zu berechnenden Fibonacci-Zahl an: ";
 		cin >> input;
-		cout << "Das Ergebnis von fib ist " << fib(input) << ".\n";
-		cout << "Das Ergebnis von fib2 ist " << fib2(input) << ".\n";
+		//cout << "Das Ergebnis von fib ist " << fib(input) << ".\n";
+		//cout << "Das Ergebnis von fib2 ist " << fib2(input) << ".\n";
 		cout << "Das Ergebnis von fib3 ist " << fib3(input) << ".\n";
 		cout << "Das Ergebnis von fib4 ist " << fib4(input) << ".\n";
 		cout << "Das Ergebnis von fib5 ist " << fib5(input) << ".\n";
