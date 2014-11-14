@@ -1,4 +1,5 @@
 #include "stdafx.h"	//visual studio created file. it's meant to decrease compiling time, but this program is short, so it's empty
+#include "pthread.h"
 
 using namespace std;
 
@@ -101,20 +102,24 @@ void initFibLUT(){	//open textfile, read the strings, convert them to int, then 
 	}
 }
 
+#ifdef __linux__
+int main(int argc, char* argv[])
+#else
 int main(int argc, _TCHAR* argv[])
+#endif
 {
 	int input;
-	//fibToText();
+	fibToText();
 	initFibLUT();
 	testing::InitGoogleTest(&argc, argv);
 
-	RUN_ALL_TESTS();
+	//RUN_ALL_TESTS();
 
 	for (int i = 1; i > 0;){
 		cout << "Bitte geben sie die Nummer der zu berechnenden Fibonacci-Zahl an: ";
 		cin >> input;
-		//cout << "Das Ergebnis von fib ist " << fib(input) << ".\n";
-		//cout << "Das Ergebnis von fib2 ist " << fib2(input) << ".\n";
+		cout << "Das Ergebnis von fib ist " << fib(input) << ".\n";
+		cout << "Das Ergebnis von fib2 ist " << fib2(input) << ".\n";
 		cout << "Das Ergebnis von fib3 ist " << fib3(input) << ".\n";
 		cout << "Das Ergebnis von fib4 ist " << fib4(input) << ".\n";
 		cout << "Das Ergebnis von fib5 ist " << fib5(input) << ".\n";

@@ -1,20 +1,31 @@
-// stdafx.h : Includedatei für Standardsystem-Includedateien
-// oder häufig verwendete projektspezifische Includedateien,
-// die nur in unregelmäßigen Abständen geändert werden.
+// stdafx.h : Includedatei fï¿½r Standardsystem-Includedateien
+// oder hï¿½ufig verwendete projektspezifische Includedateien,
+// die nur in unregelmï¿½ï¿½igen Abstï¿½nden geï¿½ndert werden.
 //
 
 #pragma once
 
 #include <stdio.h>
+#ifdef __linux__
+#else
 #include <tchar.h>
+#endif
+
 #include <iostream>
 #include <vector>	//for fib4
-#include <gtest\gtest.h>
+
+#ifdef __linux__
+#include "gtest/gtest.h"
+#else
+#include "gtest\gtest.h"
+#endif
+
+
 #include <cmath>	//for fib5
 #include <iostream>	//for fibToText
 #include <fstream>
 #include <array>
-#include <Matrix.h>
+#include "Matrix.h"
 
 
-// TODO: Hier auf zusätzliche Header, die das Programm erfordert, verweisen.
+// TODO: Hier auf zusï¿½tzliche Header, die das Programm erfordert, verweisen.
