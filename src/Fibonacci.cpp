@@ -113,7 +113,7 @@ int main(int argc, _TCHAR* argv[])
 	initFibLUT();
 	testing::InitGoogleTest(&argc, argv);
 
-	//RUN_ALL_TESTS();
+	RUN_ALL_TESTS();
 
 	for (int i = 1; i > 0;){
 		cout << "Bitte geben sie die Nummer der zu berechnenden Fibonacci-Zahl an: ";

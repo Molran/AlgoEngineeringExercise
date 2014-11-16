@@ -1,8 +1,4 @@
-// stdafx.h : Includedatei f�r Standardsystem-Includedateien
-// oder h�ufig verwendete projektspezifische Includedateien,
-// die nur in unregelm��igen Abst�nden ge�ndert werden.
-//
-
+// stdafx.h : Visual Studio doesn't compile data again and again, which is included here
 #pragma once
 
 #include <stdio.h>
@@ -12,7 +8,7 @@
 #endif
 
 #include <iostream>
-#include <vector>	//for fib4
+#include <vector>	
 
 #ifdef __linux__
 #include "gtest/gtest.h"
@@ -21,11 +17,9 @@
 #endif
 
 
-#include <cmath>	//for fib5
-#include <iostream>	//for fibToText
+#include <cmath>	
+#include <iostream>	
 #include <fstream>
 #include <array>
 #include "Matrix.h"
 
-
-// TODO: Hier auf zus�tzliche Header, die das Programm erfordert, verweisen.
