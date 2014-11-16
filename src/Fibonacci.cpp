@@ -1,17 +1,19 @@
 #include "stdafx.h"	//visual studio created file. it's meant to decrease compiling time, but this program is short, so it's empty
+#ifdef __linux__
 #include "pthread.h"
+#endif
 
 using namespace std;
 
 std::array <long long int,90> fibLUT;
 
-long long int fib(int x){		//code derived from definition
+long long int fib(int x){		//code derived from definition. Correct for 0 <= x <= 90.
 	if (x <= 0) return 0;
 	if (x == 1) return 1;
 	return fib(x - 1) + fib(x - 2);
 }
 
-long long int fib2(int x){	//linear running time and memory
+long long int fib2(int x){	//linear running time and memory. Correct for 0 <= x <= 90.
 	vector<long long int> fibs;
 
 	fibs.push_back(0);
@@ -26,7 +28,7 @@ long long int fib2(int x){	//linear running time and memory
 	return fibs.back();
 }
 
-long long int fib3(int x){	//linear time, constant memory
+long long int fib3(int x){	//linear time, constant memory. Correct for 0 <= x <= 90.
 	if (x <= 0) return 0;
 	if (x == 1) return 1;
 
@@ -49,7 +51,7 @@ Matrix fib4help(Matrix matrix, int x){
 	if ((x % 2) == 1) return matrix.mult(fib4help(matrix.mult(matrix), x / 2));
 }
 
-long long int fib4(int x){	//logarithmic running time
+long long int fib4(int x){	//logarithmic running time. Correct for 0 <= x <= 90.
 	if (x <= 0) return 0;
 	if (x == 1) return 1;
 
@@ -71,15 +73,15 @@ long long int fib4(int x){	//logarithmic running time
 	return resMatrix.getElement(0, 0);
 }
 
-long long int fib5(int x){	//formula derived from lecture, no matrix needed, unprecise after fib5(75)
+long long int fib5(int x){	//formula derived from lecture, no matrix needed. Correct for 0 <= x <= 75.
 	if (fib5 < 0) return 0;
 	double res = floor((1.0 / pow(5.0, 0.5)) * pow(((1.0 + pow(5.0, 0.5)) / 2.0), x) + 0.5);
 	return res;
 }
 
-long long int fib6(int x){	//taking information from lookup table, if not, use fib5() to calculate
+long long int fib6(int x){	//taking information from lookup table, if not, use fib4() to calculate. Correct for 0 <= x <= 90.
 	if(x < fibLUT.size()) return fibLUT[x];
-	return fib5(x);
+	return fib4(x);
 }
 
 void fibToText(){	//creates a txt file with 90 fibonacci numbers, you can read it in linear time with getline()
